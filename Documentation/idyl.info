@@ -1,0 +1,263 @@
+This is Info file idyl.info, produced by Makeinfo-1.55 from the input
+file idyl.texi.
+
+START-INFO-DIR-ENTRY
+* IDyl::                      A Dylan interpreter written in Scheme.
+END-INFO-DIR-ENTRY
+
+
+File: idyl.info,  Node: Top,  Prev: (dir),  Up: (dir)
+
+Overview
+********
+
+IDyl is an interpreter for a language resembling Dylan (trademark of
+Apple Computer). It is a first step towards the implementation of a
+production quality compiler for Dylan. It is currently being developped
+by Dominique Boucher, Marc Feeley, Marco Jacques, Jacques Malenfant,
+and Manuel Serrano.
+
+   Although IDyl provides a few extensions to Dylan, there are many
+features that are missing.  IDyl is essentially a pedogagical tool,
+primarily intended for the exploration of the Dylan language and its
+implementation. It should be kept in mind that IDyl is still
+experimental and is not meant for production use.
+
+   The latest version of IDyl can be obtained through the INTERNET from
+the following anonymous FTP site:
+
+   	`ftp.iro.umontreal.ca:pub/parallele/idyl/idyl-0.1'
+
+Comments, questions, and bug reports are welcome and should be sent to:
+
+   	`boucherd@iro.umontreal.ca'
+
+* Menu:
+
+* Compiling IDyl::    How to compile the interpreter.
+* The REPL::          The Read-Eval-Print loop.
+* Differences::       Differences with the DIRM.
+* Extensions::        Extensions to the DIRM.
+* Index::             The index.
+
+
+File: idyl.info,  Node: Compiling IDyl,  Next: The REPL,  Prev: Top,  Up: Top
+
+Compiling IDyl
+**************
+
+The interpreter can be built using one of the following Scheme
+compilers:
+
+   * Bigloo 1.7 or later
+
+   * Gambit-C 2.2 or later
+
+   Here are the steps to follow in order to properly install IDyl:
+
+  1. Edit the Makefile to suit your needs. The following variables
+     should be changed: `A.OUT', `SCMCONFIGDIR', `INSTALL_DIR',
+     `LIB_DIR', `INSTALL', `CC', `GAMBIT', `BIGLOO', and `MKAFILE'.
+
+  2. Run `make config' to configure the interpreter.
+
+  3. Run `make bigloo' or `make gambit' to build the interpreter.
+
+  4. Run `make install' to install the libraries.
+
+
+File: idyl.info,  Node: The REPL,  Next: Differences,  Prev: Compiling IDyl,  Up: Top
+
+The Read-Eval-Print loop.
+*************************
+
+IDyl is invoked using the following command:
+
+     idyl [-emacs] [f1 f2 f3 ...]
+
+   IDyl first reads a few files (its standard library) and then starts
+the Read-Eval-Print loop (REPL). If user filenames were supplied on the
+command-line, these files are loaded just before IDyl starts the REPL.
+The only option recognized by IDyl (`-emacs') will be explained below.
+If IDyl is compiled with Gambit-C, you can also specify the stack size,
+the heap size, and the size of the constant area using the appropriate
+command-line option.
+
+   It should be noted that in contrast to most interpreters, IDyl does
+not display a prompt that tells the user it is ready for evaluation.
+Instead, the user enters an expression or a declaration and then
+presses `return'. The interpreter then evaluates the expression or
+declaration and displays the result prefixed by `//'.
+
+   It is also possible to feed the interpreter with an expression (or
+multiple expressions) that span more than one line. To do this, the
+first line of input should end with a backslash character (`\'). This
+tells the interpreter to switch to multi-line mode. To send the input
+to the interpreter, the user must enter `<Ctrl-D>' on a new line. Here
+is a sample interaction:
+
+     % idyl *<cr>*
+     /*********************************/
+     /** IDyl v0.1    (05/25/95)     **/
+     /** Entering Dylan REP loop     **/
+     /** Type `quit ()' to exit      **/
+     /*********************************/
+     #"foo" *<cr>*
+     // value = #"foo"
+     1 + 2 *<cr>*
+     // value = 3
+     define class <a> (<object>) \*<cr>*
+       slot a; *<cr>*
+     end ; *<cr>*
+     *<cr>*
+     define variable x = make (<a>) ; *<cr>*
+     *<^D>*
+     // value = {class <A>}
+     // value = #f
+     quit () *<cr>*
+     %
+
+   The `-emacs' command-line option can be used to switch to the
+multi-line mode by default (as used by the Emacs mode for IDyl). In this
+case, it is not necessary to enter the backslash character and a
+`<Ctrl-D>' character must end the input to send to the interpreter.
+
+
+File: idyl.info,  Node: Differences,  Next: Extensions,  Prev: The REPL,  Up: Top
+
+Differences with the DIRM
+*************************
+
+   Here are the features that appear in the DIRM (Dylan Interim
+Reference Manual) that are missing in IDyl:
+
+   * Modules and libraries.
+
+     Modules and libraries are not yet supported by IDyl. Files
+     containing library and module declarations are parsed by IDyl but
+     these declarations are ignored by the interpreter.
+
+   * Return values.
+
+     Currently, there is no type-checking on return values; the number
+     of values returned is not checked either.
+
+   * Collections.
+
+     Several methods and generic functions that relate to the collection
+     heterarchy have not yet been implemented. All the classes in the
+     heterarchy are defined, but few are actually instantiable. The
+     following classes are fully implemented: `<array>', `<vector>',
+     `<simple-object-vector>', `<string>', `<byte-string>', `<list>',
+     `<pair>', and `<empty-list>'. The other classes can be
+     instantiated, but using them may cause unpredictable behavior.
+
+   * Numbers.
+
+     Only `<integer>' and `<double-float>' are instantiable classes.
+
+   * Controlling dynamism.
+
+     IDyl can parse the adjectives that control the dynamism of Dylan's
+     functions and classes, but it doesn't make use of them. So you can
+     subclass a predefined sealed class, but the result is
+     unpredictable.
+
+   * The `make' generic function.
+
+     `make' has not been specialized on `<class>' and
+     `<generic-function>' so it is not possible to dynamically create
+     new classes and generic functions. All classes and generic
+     functions must be defined using the `define class' and `define
+     generic' defining forms.
+
+   * The class precedence list computation algorithm.
+
+     With each class is associated a class precedence list (CPL). The
+     CPL of a class A is a list which contains all the superclasses of
+     A in some order. In IDyl, the CPL is computed by a monotonic
+     algorithm that differs from the CLOS algorithm described in the
+     DIRM and that is slighty more restrictive. I.e. some class
+     heterarchies will be rejected by IDyl, altough they are acceptable
+     by the CLOS algorithm.
+
+
+File: idyl.info,  Node: Extensions,  Next: Index,  Prev: Differences,  Up: Top
+
+Extensions to the DIRM
+**********************
+
+   IDyl provides a few functions and one class that are not described in
+the DIRM. These are listed below.
+
+ - Function: quit => NEVER RETURNS
+     This function exits the interpreter.
+
+ - Function: load BYTE-STRING => `#f'
+     Loads the file specified by the argument. All the expressions and
+     declarations contained in the file are evaluated (in the same
+     order as they appear).
+
+ - Function: reset-environment => `#f'
+     This function resets the global environment to its initial state
+     (when the interpreter was launched).
+
+ - Function: printf BYTE-STRING #REST ARGS => `#f'
+     This function is similar to the C `printf' function. The first
+     argument is a string template in which values can be inserted (see
+     the DIRM format string specification, p. 152, for the format
+     directives). The remaining arguments are those values that will be
+     inserted in the format string.
+
+ - Instantiable class: <window>
+     It is possible to open windows under X-Windows. All windows are
+     direct instances of class `<window>'. Windows are opened at
+     instance creation time (i.e. in `make'). The recognized
+     initialization arguments are: `name:', an instance of
+     `<byte-string>', is the name of the window (mandatory); `<width>',
+     an instance of `<integer>', is the width of the window in pixels
+     (default = 100); `height:', an instance of `<integer>', is the
+     height of the window in pixels (default = 100).
+
+
+ - Generic function: close WINDOW => `#f'
+     This functions closes the specified window and returns `#f'. It
+     signals a `<simple-warning>' condition if the window is already
+     closed.
+
+ - Generic function: draw-line WINDOW COL X1 Y1 X2 Y2 => `#f'
+     This functions draws a line between two points `(x1, y1)' and
+     `(x2, y2)' in the window `window'. The line drawn is of color
+     `col'. All the arguments must be instances of `<integer>', except
+     `window', which must be a instance of `<window>'.  `draw-line'
+     signals a condition of type `<simple-warning>' if the window is
+     closed.
+
+
+File: idyl.info,  Node: Index,  Prev: Extensions,  Up: Top
+
+Index
+*****
+
+* Menu:
+
+* <window>:                             Extensions.
+* load:                                 Extensions.
+* printf:                               Extensions.
+* reset-environment:                    Extensions.
+* close:                                Extensions.
+* environnement reinitialization:       Extensions.
+* Loading a file:                       Extensions.
+* X windows:                            Extensions.
+
+
+
+Tag Table:
+Node: Top197
+Node: Compiling IDyl1398
+Node: The REPL2079
+Node: Differences4253
+Node: Extensions6514
+Node: Index8715
+
+End Tag Table

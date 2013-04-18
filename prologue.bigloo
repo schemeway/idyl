@@ -1,0 +1,58 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : prologue.bigloo                                ;;
+;; DATE DE CREATION      : Mon May 29 09:53:32 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:53:42 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Bigloo specific macros ...                                             ;;
+;; ---------------------------------------------------------------------- ;;
+
+;; ---------------------------------------------------------------------- ;;
+;; ***** DO NOT EDIT BELOW THIS LINE *****                                ;;
+;; ---------------------------------------------------------------------- ;;
+
+(define-macro (def-struct name . slots)
+   `(begin
+       (define-struct ,name ,@slots)
+       (define-macro (,(symbol-append 'make- name ) . slots)
+	,(list (quote quasiquote) (list name (list 'unquote-splicing 'slots))))))
+
+
+(define-macro (dylan:string->symbol str)
+  `(string->symbol (string-upcase ,str)))
+
+(define-macro (lst? v)
+  `(LET ((V ,v))
+     (OR (NULL? V) (PAIR? V))))
+
+(define-macro (secure-open-input-file str)
+  `(IF (FILE-EXISTS? ,str)
+       (OPEN-INPUT-FILE ,str)
+       #f))
+
+(define-macro (fix:+ x1 x2) `(+fx ,x1 ,x2))
+(define-macro (flo:+ x1 x2) `(+fl ,x1 ,x2))
+(define-macro (fix:- x1 x2) `(-fx ,x1 ,x2))
+(define-macro (flo:- x1 x2) `(-fl ,x1 ,x2))
+(define-macro (fix:* x1 x2) `(*fx ,x1 ,x2))
+(define-macro (flo:* x1 x2) `(*fl ,x1 ,x2))
+(define-macro (fix:/ x1 x2) `(/fx ,x1 ,x2))
+(define-macro (flo:/ x1 x2) `(/fl ,x1 ,x2))
+(define-macro (fix:< x1 x2) `(<fx ,x1 ,x2))
+(define-macro (flo:< x1 x2) `(<fl ,x1 ,x2))
+(define-macro (fix:= x1 x2) `(=fx ,x1 ,x2))
+(define-macro (flo:= x1 x2) `(=fl ,x1 ,x2))
+(define-macro (fix->flo x1) `(fixnum->flonum ,x1))
+
+(define-macro (catch-signals thunk)
+  `(BEGIN
+     (SIGNAL 2  (LAMBDA (N) (DYLAN:ERROR "User interrupt ..")))
+     (SIGNAL 8  (LAMBDA (N) (DYLAN:ERROR "Floating point exception")))
+     (SIGNAL 19 (LAMBDA (N) (DYLAN:WARNING "IDyl resumes execution")))
+     (,thunk)))
+
+(define-macro (main) '#f)
+
+;; --- Fin du prologue puor Bigloo -------------------------------------- ;;
+

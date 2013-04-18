@@ -1,0 +1,17 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : lr-dvr.bgl                                     ;;
+;; DATE DE CREATION      : Mon May 29 09:50:45 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:50:50 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module lr-driver
+	(include "prologue.bigloo")
+	(export (push stack sp new-cat goto-table lval)
+		(make-parser action-table goto-table reduction-table token-defs)))
+
+;; --- Fin du module `lr-driver' ---------------------------------------- ;;
+

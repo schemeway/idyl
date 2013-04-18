@@ -1,0 +1,24 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : generic.bgl                                    ;;
+;; DATE DE CREATION      : Mon May 29 09:42:58 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:43:01 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module generic 
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import class env error global utils)
+	(export (fun:ensure-generic-function name)
+		(fun:add-method! gf method)
+		(fun:applicable-method? fun args)
+		(fun:sort-methods methods actuals)
+		(fun:make-predef name spec rest? keys all-keys? values proc)
+		(fun:apply fun args env)
+		(fun:apply-generic fun args)))
+
+;; --- Fin du module `generic' ------------------------------------------ ;;
+

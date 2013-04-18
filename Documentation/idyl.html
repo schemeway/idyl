@@ -1,0 +1,321 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.35.CrT.1
+     from idyl.texi on 95Jun2 -->
+
+<TITLE>IDyl</TITLE>
+</HEAD>
+<BODY>
+<H1>IDyl</H1>
+
+
+<H1><A NAME="SEC1" HREF="idyl_toc.html#SEC1">Overview</A></H1>
+
+<P>
+IDyl is an interpreter for a language resembling Dylan (trademark of
+Apple Computer). It is a first step towards the implementation of a
+production quality compiler for Dylan. It is currently being developped
+by Dominique Boucher, Marc Feeley, Marco Jacques, Jacques
+Malenfant, and Manuel Serrano.
+
+</P>
+<P>
+Although IDyl provides a few extensions to Dylan, there are many
+features that are missing.  IDyl is essentially a pedogagical tool,
+primarily intended for the exploration of the Dylan language and its
+implementation. It should be kept in mind that IDyl is still
+experimental and is not meant for production use.
+
+</P>
+<P>
+The latest version of IDyl can be obtained through the INTERNET
+from the following anonymous FTP site:
+
+</P>
+<P>
+	<CODE>ftp.iro.umontreal.ca:pub/parallele/idyl/idyl-0.1</CODE>
+
+</P>
+<P>
+Comments, questions, and bug reports are welcome and should be
+sent to: 
+
+</P>
+<P>
+	<CODE>boucherd@iro.umontreal.ca</CODE>
+
+</P>
+
+
+
+<H1><A NAME="SEC2" HREF="idyl_toc.html#SEC2">Compiling IDyl</A></H1>
+
+<P>
+The interpreter can be built using one of the following Scheme
+compilers: 
+
+</P>
+
+<UL>
+<LI>Bigloo 1.7 or later
+
+<LI>Gambit-C 2.2 or later
+
+</UL>
+
+<P>
+Here are the steps to follow in order to properly install IDyl:
+
+</P>
+
+<OL>
+<LI>
+
+Edit the Makefile to suit your needs. The following variables
+should be changed: <CODE>A.OUT</CODE>, <CODE>SCMCONFIGDIR</CODE>,
+<CODE>INSTALL_DIR</CODE>, <CODE>LIB_DIR</CODE>, <CODE>INSTALL</CODE>, <CODE>CC</CODE>,
+<CODE>GAMBIT</CODE>, <CODE>BIGLOO</CODE>, and <CODE>MKAFILE</CODE>.
+<LI>
+
+Run <CODE>make config</CODE> to configure the interpreter.
+<LI>
+
+Run <CODE>make bigloo</CODE> or <CODE>make gambit</CODE> to build the
+interpreter. 
+<LI>
+
+Run <CODE>make install</CODE> to install the libraries.
+</OL>
+
+
+
+<H1><A NAME="SEC3" HREF="idyl_toc.html#SEC3">The Read-Eval-Print loop.</A></H1>
+
+<P>
+
+</P>
+<P>
+IDyl is invoked using the following command:
+
+</P>
+
+<PRE>
+idyl [-emacs] [f1 f2 f3 ...]
+</PRE>
+
+<P>
+IDyl first reads a few files (its standard library) and then starts the
+Read-Eval-Print loop (REPL). If user filenames were supplied on the
+command-line, these files are loaded just before IDyl starts the
+REPL. The only option recognized by IDyl (<CODE>-emacs</CODE>) will be
+explained below.  If IDyl is compiled with Gambit-C, you can also
+specify the stack size, the heap size, and the size of the constant area
+using the appropriate command-line option.
+
+</P>
+<P>
+It should be noted that in contrast to most interpreters, IDyl does not
+display a prompt that tells the user it is ready for
+evaluation. Instead, the user enters an expression or a declaration and
+then presses <CODE>return</CODE>. The interpreter then evaluates the
+expression or declaration and displays the result prefixed by <CODE>//</CODE>.
+
+</P>
+<P>
+It is also possible to feed the interpreter with an expression (or
+multiple expressions) that span more than one line. To do this, the
+first line of input should end with a backslash character
+(<CODE>\</CODE>). This tells the interpreter to switch to multi-line mode. To
+send the input to the interpreter, the user must enter <CODE>&#60;Ctrl-D&#62;</CODE>
+on a new line. Here is a sample interaction:
+
+</P>
+
+<PRE>
+% idyl <EM>&#60;cr&#62;</EM>
+/*********************************/
+/** IDyl v0.1    (05/25/95)     **/
+/** Entering Dylan REP loop     **/
+/** Type `quit ()' to exit      **/
+/*********************************/
+#"foo" <EM>&#60;cr&#62;</EM>
+// value = #"foo"
+1 + 2 <EM>&#60;cr&#62;</EM>
+// value = 3
+define class &#60;a&#62; (&#60;object&#62;) \<EM>&#60;cr&#62;</EM>
+  slot a; <EM>&#60;cr&#62;</EM>
+end ; <EM>&#60;cr&#62;</EM>
+<EM>&#60;cr&#62;</EM>
+define variable x = make (&#60;a&#62;) ; <EM>&#60;cr&#62;</EM>
+<EM>&#60;^D&#62;</EM>
+// value = {class &#60;A&#62;}
+// value = #f 
+quit () <EM>&#60;cr&#62;</EM>
+% 
+</PRE>
+
+<P>
+ 
+
+</P>
+<P>
+The <CODE>-emacs</CODE> command-line option can be used to switch to the
+multi-line mode by default (as used by the Emacs mode for IDyl). In this
+case, it is not necessary to enter the backslash character and a
+<CODE>&#60;Ctrl-D&#62;</CODE> character must end the input to send to the interpreter.
+
+</P>
+
+
+
+<H1><A NAME="SEC4" HREF="idyl_toc.html#SEC4">Differences with the DIRM</A></H1>
+
+<P>
+Here are the features that appear in the DIRM (Dylan Interim Reference
+Manual) that are missing in IDyl:
+
+</P>
+
+<UL>
+<LI>Modules and libraries.
+
+Modules and libraries are not yet supported by IDyl. Files
+containing library and module declarations are parsed by IDyl but
+these declarations are ignored by the interpreter. 
+
+<LI>Return values.
+
+Currently, there is no type-checking on return values; the number of
+values returned is not checked either.
+
+<LI>Collections.
+
+Several methods and generic functions that relate to the collection
+heterarchy have not yet been implemented. All the classes in the
+heterarchy are defined, but few are actually instantiable. The
+following classes are fully implemented: <CODE>&#60;array&#62;</CODE>,
+<CODE>&#60;vector&#62;</CODE>, <CODE>&#60;simple-object-vector&#62;</CODE>,
+<CODE>&#60;string&#62;</CODE>, <CODE>&#60;byte-string&#62;</CODE>, <CODE>&#60;list&#62;</CODE>, <CODE>&#60;pair&#62;</CODE>, and
+<CODE>&#60;empty-list&#62;</CODE>. The other classes can be instantiated, but using them may
+cause unpredictable behavior.
+
+<LI>Numbers.
+
+Only <CODE>&#60;integer&#62;</CODE> and <CODE>&#60;double-float&#62;</CODE> are instantiable
+classes.  
+
+<LI>Controlling dynamism.
+
+IDyl can parse the adjectives that control the dynamism of Dylan's
+functions and classes, but it doesn't make use of them. So
+you can subclass a predefined sealed class, but the result is
+unpredictable.
+
+<LI>The <CODE>make</CODE> generic function.
+
+<CODE>make</CODE> has not been specialized on <CODE>&#60;class&#62;</CODE> and
+<CODE>&#60;generic-function&#62;</CODE> so it is not possible to dynamically create
+new classes and generic functions. All classes and generic functions
+must be defined using the <CODE>define class</CODE> and <CODE>define
+generic</CODE> defining forms. 
+
+<LI>The class precedence list computation algorithm.
+
+With each class is associated a class precedence list (CPL). The CPL
+of a class A is a list which contains all the superclasses of A in
+some order. In IDyl, the CPL is computed by a monotonic algorithm
+that differs from the CLOS algorithm described in the DIRM and that is
+slighty more restrictive. I.e. some class heterarchies will be
+rejected by IDyl, altough they are acceptable by the CLOS
+algorithm.
+
+</UL>
+
+
+
+<H1><A NAME="SEC5" HREF="idyl_toc.html#SEC5">Extensions to the DIRM</A></H1>
+
+<P>
+IDyl provides a few functions and one class that are not described in
+the DIRM. These are listed below.
+
+</P>
+<P>
+<U>Function:</U> <B>quit</B> <I>=> never returns</I><P>
+<A NAME="IDX1"></A>
+This function exits the interpreter. 
+
+</P>
+<P>
+<U>Function:</U> <B>load</B> <I>byte-string => <CODE>#f</CODE></I><P>
+<A NAME="IDX2"></A>
+<A NAME="IDX3"></A>
+<A NAME="IDX4"></A>
+Loads the file specified by the argument. All the expressions and
+declarations contained in the file are evaluated (in the same order as
+they appear).
+
+</P>
+
+<P>
+<U>Function:</U> <B>reset-environment</B> <I>=> <CODE>#f</CODE></I><P>
+<A NAME="IDX5"></A>
+<A NAME="IDX6"></A>
+<A NAME="IDX7"></A>
+This function resets the global environment to its initial state (when
+the interpreter was launched). 
+
+</P>
+<P>
+<U>Function:</U> <B>printf</B> <I>byte-string #rest args => <CODE>#f</CODE></I><P>
+<A NAME="IDX8"></A>
+<A NAME="IDX9"></A>
+
+</P>
+<P>
+This function is similar to the C <CODE>printf</CODE> function. The first
+argument is a string template in which values can be inserted (see the
+DIRM format string specification, p. 152, for the format
+directives). The remaining arguments are those values that will be
+inserted in the format string. 
+
+</P>
+<P>
+<U>Instantiable class:</U> <B>&#60;window&#62;</B><P>
+<A NAME="IDX10"></A>
+<A NAME="IDX11"></A>
+<A NAME="IDX12"></A>
+It is possible to open windows under X-Windows. All windows are direct
+instances of class <CODE>&#60;window&#62;</CODE>. Windows are opened at instance
+creation time (i.e. in <CODE>make</CODE>). The recognized initialization
+arguments are: <CODE>name:</CODE>, an instance of <CODE>&#60;byte-string&#62;</CODE>, is the
+name of the window (mandatory); <CODE>&#60;width&#62;</CODE>, an instance of
+<CODE>&#60;integer&#62;</CODE>, is the width of the window in pixels (default = 100);
+<CODE>height:</CODE>, an instance of <CODE>&#60;integer&#62;</CODE>, is the height of the
+window in pixels (default = 100).
+
+</P>
+<P>
+
+<U>Generic function:</U> <B>close</B> <I>window => <CODE>#f</CODE></I><P>
+<A NAME="IDX13"></A>
+<A NAME="IDX14"></A>
+This functions closes the specified window and returns <CODE>#f</CODE>. It
+signals a <CODE>&#60;simple-warning&#62;</CODE> condition if the window is already
+closed.
+
+</P>
+<P>
+<U>Generic function:</U> <B>draw-line</B> <I>window col x1 y1 x2 y2 => <CODE>#f</CODE></I><P>
+<A NAME="IDX15"></A>
+This functions draws a line between two points <CODE>(x1, y1)</CODE> and
+<CODE>(x2, y2)</CODE> in the window <CODE>window</CODE>. The line drawn is of color
+<CODE>col</CODE>. All the arguments must be instances of <CODE>&#60;integer&#62;</CODE>,
+except <CODE>window</CODE>, which must be a instance of <CODE>&#60;window&#62;</CODE>.
+<CODE>draw-line</CODE> signals a condition of type <CODE>&#60;simple-warning&#62;</CODE> if
+the window is closed.
+
+</P>
+
+</BODY>
+</HTML>

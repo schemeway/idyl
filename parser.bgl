@@ -1,0 +1,17 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : parser.bgl                                     ;;
+;; DATE DE CREATION      : Mon May 29 09:52:21 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:52:26 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module lalr-tables
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import lr-driver utils)
+	(export parser))
+
+;; --- Fin du module `lalr-tables' -------------------------------------- ;;

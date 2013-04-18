@@ -1,0 +1,20 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : cleanup.bgl                                    ;;
+;; DATE DE CREATION      : Fri May 26 16:21:18 1995                       ;;
+;; DERNIERE MODIFICATION : Fri May 26 16:21:34 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module cleanup
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import error)
+	(export (clean:get-top-of-stack)
+		(clean:run-and-pop old-top)
+		(clean:make-cleanup exit-proc cleanup-body)
+		(clean:reset-stack)))
+
+;; --- Fin de la declaration de module ---------------------------------- ;;

@@ -1,0 +1,20 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : gen.bgl                                        ;;
+;; DATE DE CREATION      : Mon May 29 09:40:05 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:40:21 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module comp
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import class cleanup env error global generic utils)
+	(export (gen:gen-constituent c)
+		(gen:gen-expr cte expr)))
+
+
+;; --- Fin du module `comp' --------------------------------------------- ;;
+

@@ -1,0 +1,26 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : util.bgl                                       ;;
+;; DATE DE CREATION      : Mon May 29 09:58:23 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:58:25 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module utils
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(export $the-empty-list
+		$the-false-value
+		$the-true-value
+		$non-initialized
+		$unbound
+		(insert-in-condition-clause! x c)
+		(sinsert elem lst)
+		$all-keys-node
+		(binop-series->expr lst)
+		(filter pred l)))
+
+;; --- Fin du module `utils' -------------------------------------------- ;;
+

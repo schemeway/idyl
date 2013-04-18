@@ -1,0 +1,22 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : x.bgl                                          ;;
+;; DATE DE CREATION      : Mon May 29 09:58:09 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:58:14 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module x11
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import env error class generic global utils)
+	(foreign ; (include "x11.h")
+		 (int  x-open-window  (string int int)          "x_open_window")
+		 (void x-close-window (int)                     "x_close_window")
+		 (void x-draw-line    (int int int int int int) "x_draw_line"))
+	(export (x:init)))
+
+;; --- Fin du module `x11' ---------------------------------------------- ;;
+

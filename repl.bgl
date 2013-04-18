@@ -1,0 +1,21 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : repl.bgl                                       ;;
+;; DATE DE CREATION      : Mon May 29 09:54:42 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:54:45 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module dylan
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import 
+	 lr-driver lexer lalr-tables class cleanup 
+	 env error generic comp global utils x11);
+	(force utils class env generic comp x11 error global)
+	(main dylan:repl))
+
+
+;; --- Fin du module `dylan' -------------------------------------------- ;;

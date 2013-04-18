@@ -1,0 +1,20 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : lexer.bgl                                      ;;
+;; DATE DE CREATION      : Mon May 29 09:48:36 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:48:39 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module lexer
+	(include "prologue.bigloo")
+	(import global)
+	(export *end-of-constituent*
+		*multi-line?*
+		(init-lexer port)
+		(lexer)))
+
+;; --- Fin du module `lexer' -------------------------------------------- ;;
+

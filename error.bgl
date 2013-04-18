@@ -1,0 +1,32 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : error.bgl                                      ;;
+;; DATE DE CREATION      : Mon May 29 09:38:35 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:38:48 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module error
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import utils class env generic global)
+	(export (error:init)
+		(error:get-top-of-stack)
+		(error:establish-handler tp tst args hdl)
+		(error:pop-handlers oldp)
+		(error:abort)
+		(error:signal cnd)
+		(error:check-type val type)
+		(catch-error thunk)
+		(catch-quit-cont thunk)
+		(call-quit-cont)
+		(dylan:error str . l)
+		(dylan:warning str . l)
+		(display-format-string str . l)
+		(display-obj obj)
+		(pretty-obj obj)))
+		
+
+;; --- Fin du module `error' -------------------------------------------- ;;

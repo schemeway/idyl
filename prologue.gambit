@@ -1,0 +1,142 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : prologue.gambit                                ;;
+;; DATE DE CREATION      : Mon May 29 09:54:00 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:54:16 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Gambit-C specific macros ...                                           ;;
+;; ---------------------------------------------------------------------- ;;
+
+;; ---------------------------------------------------------------------- ;;
+;; ***** DO NOT EDIT BELOW THIS LINE *****                                ;;
+;; ---------------------------------------------------------------------- ;;
+
+(##define-macro (def-struct name . field-defs)
+
+  (define (err)
+    (##signal '##SIGNAL.SYNTAX-ERROR
+              (##cons 'define-structure (##cons name field-defs))
+              "Ill-formed special form:"
+              'define-structure))
+
+  (define (sym . strings)
+    (##string->symbol (##apply ##string-append strings)))
+
+  (if (##symbol? name)
+    (let* ((name-str (##symbol->string name))
+           (tag (sym "##structure-tag." name-str)))
+
+      (define (add-field i field fields)
+        (let* ((field-str (##symbol->string field))
+               (field-ref (sym name-str "-" field-str))
+               (field-set! (sym name-str "-" field-str "-set!")))
+          (##cons `(##DEFINE-MACRO (,field-set! X Y)
+		      (##LIST '##VECTOR-SET! X ,i Y))
+                  (##cons `(##DEFINE-MACRO (,field-ref X)
+                             (##LIST '##VECTOR-REF X ,i))
+                          fields))))
+
+      (define (generate-definitions field-ops all-fields printed-fields)
+        (let ((params (##reverse all-fields)))
+          `(BEGIN
+             ,@field-ops
+             (##DEFINE-MACRO (,(sym "make-" name-str) ,@params)
+               (##LIST '##SUBTYPE-SET! (##LIST '##VECTOR ',tag ,@params) 9))
+             (##DEFINE-MACRO (,(sym name-str "?") X)
+               (##LIST 'LET
+                     (##LIST (##LIST 'XXX. X))
+                     '(AND (##SUBTYPED? XXX.)
+                           (##EQ? (##SUBTYPE XXX.) 9)
+                           (##EQ? (##VECTOR-REF XXX. 0) ,tag))))
+             ',name)))
+
+      (let loop1 ((l1 field-defs) (l2 '()) (l3 '()) (i 1))
+        (if (##pair? l1)
+          (let ((rest (##cdr l1)) (field (##car l1)))
+            (cond ((##symbol? field)
+                   (loop1 rest
+                         (add-field i field l2)
+                         (##cons field l3)
+                         (##fixnum.+ i 1)))
+                  ((and (or (##null? field) (##pair? field))
+                        (##not (##pair? rest)))
+                   (let ((printed-fields l3))
+                     (let loop2 ((l1 field) (l2 l2) (l3 l3) (i i))
+                       (if (##pair? l1)
+                         (let ((rest (##cdr l1)) (field (##car l1)))
+                           (cond ((##symbol? field)
+                                  (loop2 rest
+                                        (add-field i field l2)
+                                        (##cons field l3)
+                                        (##fixnum.+ i 1)))
+                                  (else
+                                   (err))))
+                         (generate-definitions l2 l3 printed-fields)))))
+                  (else
+                   (err))))
+          (generate-definitions l2 l3 l3))))
+    (err)))
+
+(define-macro (bind-exit proc . body)
+  `(CALL-WITH-CURRENT-CONTINUATION
+    (LAMBDA ,proc
+      ,@body)))
+
+(define-macro (catch-signals thunk)
+  `(BEGIN
+     (SET! ##USER-INTERRUPT 
+	   (LAMBDA () (DYLAN:ERROR "User interrupt ...")))
+     (##CATCH-ALL 
+      (LAMBDA (TYPE ARGS)
+	(DYLAN:ERROR TYPE))
+      ,thunk)))
+
+(define-macro (call/cc proc . body)
+  `(CALL-WITH-CURRENT-CONTINUATION ,proc))
+
+(define-macro (dylan:string->symbol str)
+  `(STRING->SYMBOL 
+    (LIST->STRING 
+     (MAP CHAR-DOWNCASE 
+	  (STRING->LIST ,str)))))
+
+(define-macro (secure-open-input-file str)
+  `(##OPEN-INPUT-FILE ,str))
+
+(define-macro (lst? v)
+  `(LET ((V ,v))
+     (OR (NULL? V) (PAIR? V))))
+
+
+(define-macro (main)
+  `(DYLAN:REPL (COMMAND-LINE)))
+
+;; (define-macro (fix:+ x1 x2) `(##fixnum.+ ,x1 ,x2))                     ;;
+;; (define-macro (fix:- x1 x2) `(##fixnum.- ,x1 ,x2))                     ;;
+;; (define-macro (fix:* x1 x2) `(##fixnum.* ,x1 ,x2))                     ;;
+;; (define-macro (fix:< x1 x2) `(##fixnum.< ,x1 ,x2))                     ;;
+;; (define-macro (fix:= x1 x2) `(##fixnum.= ,x1 ,x2))                     ;;
+;; (define-macro (fix->flo x1) `(##flonum.<-fixnum ,x1))                  ;;
+(define-macro (fix:+ x1 x2) `(+ ,x1 ,x2))
+(define-macro (fix:- x1 x2) `(- ,x1 ,x2))
+(define-macro (fix:* x1 x2) `(* ,x1 ,x2))
+(define-macro (fix:< x1 x2) `(< ,x1 ,x2))
+(define-macro (fix:= x1 x2) `(= ,x1 ,x2))
+(define-macro (fix->flo x1) `(exact->inexact ,x1))
+(define-macro (flo:+ x1 x2) `(##flonum.+ ,x1 ,x2))
+(define-macro (flo:- x1 x2) `(##flonum.- ,x1 ,x2))
+(define-macro (flo:* x1 x2) `(##flonum.* ,x1 ,x2))
+(define-macro (flo:/ x1 x2) `(##flonum./ ,x1 ,x2))
+(define-macro (flo:< x1 x2) `(##flonum.< ,x1 ,x2))
+(define-macro (flo:= x1 x2) `(##flonum.= ,x1 ,x2))
+
+(include "../structs.scm")
+
+(declare
+ (extended-bindings)
+ (standard-bindings)
+ (block))
+
+;; --- Fin du prologue pour Gambit-C ------------------------------------ ;;
+

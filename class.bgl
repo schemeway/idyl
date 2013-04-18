@@ -1,0 +1,27 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : class.bgl                                      ;;
+;; DATE DE CREATION      : Fri May 26 16:19:00 1995                       ;;
+;; DERNIERE MODIFICATION : Thu Jun  8 16:03:20 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration (for bigloo)                                        ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module class
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import comp env error generic global utils)
+	(export (class:make-class name flags supers slot-descr)
+		(class:push-new-sealing-context)
+		(class:seal-all-and-pop)
+		(class:reset-sealing-contexts)
+		(class:adjust-slots! cl env)
+		(class:subtype? t1 t2)
+		(class:general-instance? obj class)
+		(class:object-class obj)
+		(class:make class . keys)
+		(class:add-methods! cl)
+		(class:slot-get inst slot-name)))
+
+;; --- Fin du module `class' -------------------------------------------- ;;

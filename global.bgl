@@ -1,0 +1,75 @@
+;; ---------------------------------------------------------------------- ;;
+;; FICHIER               : global.bgl                                     ;;
+;; DATE DE CREATION      : Mon May 29 09:45:17 1995                       ;;
+;; DERNIERE MODIFICATION : Mon May 29 09:45:21 1995                       ;;
+;; ---------------------------------------------------------------------- ;;
+;; Copyright (c) 1995 Dominique Boucher                                   ;;
+;; ---------------------------------------------------------------------- ;;
+;; Module declaration for Bigloo                                          ;;
+;; ---------------------------------------------------------------------- ;;
+
+(module global
+	(include "prologue.bigloo")
+	(include "structs.scm")
+	(import lr-driver lexer lalr-tables env error class comp generic utils x11)
+	(export <object> 
+		<type> 
+		<class> 
+		<singleton>
+		<function> 
+		<generic-function> 
+		<method> 
+		<compiled-method>
+		<user-method> 
+		<next-method>
+		<symbol>
+		<number>
+		<integer> 
+		<double-float>
+		<collection>
+		<sequence>
+		<list>
+		<pair>
+		<empty-list>
+		<byte-string>
+		<vector>
+		<character>
+
+		<condition>
+		<serious-condition>
+		<warning>
+		<restart>
+		<error>
+		<simple-error>
+		<type-error>
+		<sealed-object-error>
+		<simple-warning>
+		<simple-restart>
+		<abort>
+		
+		(global:init)
+		
+		(predef:make-list l)
+		(predef:pair x y)
+		(predef:make-vector l)
+		(predef:make-int i) 
+		(predef:make-symbol s)
+		(predef:make-float f)
+		(predef:make-char s)
+		(predef:make-byte-string s)
+		(predef:== obj1 obj2)
+		predef:load 
+
+		initialize-gf
+		default-handler-gf
+		error-message
+		fwd-protoco-gf
+		$default-test
+		+-gf <-gf =-gf
+		fun:==
+		(dylan:load port interact?)
+		(inc-lineno!)
+		))
+
+;; --- Fin du module `global' ------------------------------------------- ;;
+
