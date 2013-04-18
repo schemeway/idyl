@@ -197,7 +197,7 @@
 
 
 (define-macro (add-binding rte i name type val)
-  `(VECTOR-SET! ,rte ,i (MAKE-BINDING ,name ,val ,type #F)))
+  `(vector-set! ,rte ,i (make-binding ,name ,val ,type #F)))
 
 ;; ***********************************************************************
 ;; Application d'une méthode (créée à l'exécution). 

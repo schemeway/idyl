@@ -12,8 +12,8 @@
 ;; get-first-val : extrait la première valeur d'une liste de résultats.   ;;
 ;; ---------------------------------------------------------------------- ;;
 (define-macro (get-first-val vals)
-  `(LET ((V ,vals))
-     (IF (LIST? V) (IF (NULL? V) $THE-FALSE-VALUE (CAR V)) V)))
+  `(let ((v ,vals))
+     (if (list? v) (if (null? v) $the-false-value (car v)) v)))
 
 
 ;; ---------------------------------------------------------------------- ;;
@@ -37,11 +37,11 @@
 (define $format-arg #f)
 
 (define-macro (make-handler type test init handl)
-  `(VECTOR ,type ,test ,init ,handl))
-(define-macro (handler-type  handl) `(VECTOR-REF ,handl 0))
-(define-macro (handler-test  handl) `(VECTOR-REF ,handl 1))
-(define-macro (handler-init  handl) `(VECTOR-REF ,handl 2))
-(define-macro (handler-handl handl) `(VECTOR-REF ,handl 3))
+  `(vector ,type ,test ,init ,handl))
+(define-macro (handler-type  handl) `(vector-ref ,handl 0))
+(define-macro (handler-test  handl) `(vector-ref ,handl 1))
+(define-macro (handler-init  handl) `(vector-ref ,handl 2))
+(define-macro (handler-handl handl) `(vector-ref ,handl 3))
 
 ;; ---------------------------------------------------------------------- ;;
 ;; L'environnement dynamique des exceptions...                            ;;

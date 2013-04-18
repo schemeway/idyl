@@ -13,9 +13,9 @@
 ;; get-first-val : extrait la première valeur d'une liste de résultats.   ;;
 ;; ---------------------------------------------------------------------- ;;
 (define-macro (get-first-val vals)
-  `(LET ((V ,vals))
-     (IF (NULL? V) $THE-FALSE-VALUE 
-	 (IF (PAIR? V) (CAR V) V))))
+  `(let ((v ,vals))
+     (if (null? v) $the-false-value 
+	 (if (pair? v) (car v) v))))
 
 (define-macro (empty-cte) ''())
 
@@ -408,7 +408,7 @@
 
 
 (define-macro (add-binding rte i name type val)
-  `(VECTOR-SET! ,rte ,i (MAKE-BINDING ,name ,val ,type #F)))
+  `(vector-set! ,rte ,i (make-binding ,name ,val ,type #f)))
 
 
 ;; ---------------------------------------------------------------------- ;;

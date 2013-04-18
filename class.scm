@@ -12,14 +12,14 @@
 ;; class:add-subclass : ajoute c2 à la liste des sous-classes de c1.
 ;; ***********************************************************************
 (define-macro (class:add-subclass! c1 c2)
-  `(CLASS-DIRECT-SUBS-SET! ,c1 (CONS ,c2 (CLASS-DIRECT-SUBS ,c1))))
+  `(class-direct-subs-set! ,c1 (cons ,c2 (class-direct-subs ,c1))))
 
 (define (make-sym . l) (dylan:string->symbol (apply string-append l)))
 
 ;; ---------------------------------------------------------------------- ;;
 ;; List of classes to seal ...                                            ;;
 ;; ---------------------------------------------------------------------- ;;
-(define *classes-to-seal* '(()))
+(define *classes-to-seal* (list '()))
 
 ;; ---------------------------------------------------------------------- ;;
 ;; Push a new context for class sealing  ...                              ;;

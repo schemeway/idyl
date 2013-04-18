@@ -31,8 +31,8 @@ CC		= gcc
 CFLAGS		= -D___SINGLE_HOST -I/usr/local/Gambit-C/include
 
 GAMBIT		= gsc
-CGAMBITFLAGS	= -:h30000,s
-LGAMBITFLAGS	= -I/usr/local/Gambit-C/include -L/usr/local/Gambit-C/lib -lgambc -lm
+CGAMBITFLAGS	= -c
+LGAMBITFLAGS	= -I/usr/local/Gambit-C/include -L/usr/local/Gambit-C/lib -lgambc -lm -ldl -lutil -lX11
 
 BIGLOO		= /home/saguenay3/serrano/house/bin/alpha/bigloo
 MKAFILE		= /home/saguenay3/serrano/house/bin/alpha/afile
@@ -62,7 +62,7 @@ BIGLOOSOURCE	=
 BIGLOOINCLUDE	= structs.scm prologue.bigloo
 
 LIBRARIES	= class.dylan coll.dylan error.dylan fun.dylan \
-		  numbers.dylan # x11.dylan
+		  numbers.dylan x11.dylan
 #; ---------------------------------------------------------------------- ;#
 #; The default compiler ...                                               ;#
 #; ---------------------------------------------------------------------- ;#
@@ -82,7 +82,7 @@ COMPILER	= `if [ -f .compiler ] ; then               \
 #; ---------------------------------------------------------------------- ;#
 SOURCE_GSC	= $(GAMBITSOURCE:%.scm=gambit-src/%.saux)   \
                   $(SOURCE:%.scm=gambit-src/%.saux)
-O_GSC		= $(SOURCE_GSC:%.saux=%.o) #gambit-src/x11.o 
+O_GSC		= $(SOURCE_GSC:%.saux=%.o) gambit-src/x11.o 
 C_GSC		= $(SOURCE_GSC:%.saux=%.c)
 
 BIGLOO_SAUX	= $(BIGLOOSOURCE:%.scm=%.saux) $(SOURCE:%.scm=%.saux)
@@ -201,17 +201,17 @@ clean.bigloo:
 #; ---------------------------------------------------------------------- ;#
 #; .scm -> .saux                                                          ;#
 #; ---------------------------------------------------------------------- ;#
-#gambit-src/x.saux: x.scm x.gsc
-#	@ rm -f gambit-src/x.saux
-#	@ cat prologue.gambit x.gsc x.scm > gambit-src/x.saux
+gambit-src/x.saux: x.scm x.gsc
+	@ rm -f gambit-src/x.saux
+	@ cat prologue.gambit x.gsc x.scm > gambit-src/x.saux
 
 bigloo-src/x11.o: x11.c x11.h
 	@ (cd bigloo-src/ ; ln -sf ../x11.c . ; \
 	  $(CC) $(CFLAGS) -c x11.c)
 
-#gambit-src/x11.o: x11.c x11.c
-#	@ (cd gambit-src/ ; ln -sf ../x11.c . ; \
-#	  $(CC) $(CFLAGS) -c x11.c)
+gambit-src/x11.o: x11.c x11.c
+	@ (cd gambit-src/ ; ln -sf ../x11.c . ; \
+	  $(CC) $(CFLAGS) -c x11.c)
 
 gambit-src/structs.saux: structs.scm
 	@ rm -f gambit-src/structs.saux

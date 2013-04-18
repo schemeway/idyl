@@ -15,7 +15,7 @@
 (##define-macro (def-struct name . field-defs)
 
   (define (err)
-    (##signal '##SIGNAL.SYNTAX-ERROR
+    (##signal '##signal.syntax-error
               (##cons 'define-structure (##cons name field-defs))
               "Ill-formed special form:"
               'define-structure))
@@ -31,24 +31,24 @@
         (let* ((field-str (##symbol->string field))
                (field-ref (sym name-str "-" field-str))
                (field-set! (sym name-str "-" field-str "-set!")))
-          (##cons `(##DEFINE-MACRO (,field-set! X Y)
-		      (##LIST '##VECTOR-SET! X ,i Y))
-                  (##cons `(##DEFINE-MACRO (,field-ref X)
-                             (##LIST '##VECTOR-REF X ,i))
+          (##cons `(##define-macro (,field-set! x y)
+		      (##list '##vector-set! x ,i y))
+                  (##cons `(##define-macro (,field-ref x)
+                             (##list '##vector-ref x ,i))
                           fields))))
 
       (define (generate-definitions field-ops all-fields printed-fields)
         (let ((params (##reverse all-fields)))
-          `(BEGIN
+          `(begin
              ,@field-ops
-             (##DEFINE-MACRO (,(sym "make-" name-str) ,@params)
-               (##LIST '##SUBTYPE-SET! (##LIST '##VECTOR ',tag ,@params) 9))
-             (##DEFINE-MACRO (,(sym name-str "?") X)
-               (##LIST 'LET
-                     (##LIST (##LIST 'XXX. X))
-                     '(AND (##SUBTYPED? XXX.)
-                           (##EQ? (##SUBTYPE XXX.) 9)
-                           (##EQ? (##VECTOR-REF XXX. 0) ,tag))))
+             (##define-macro (,(sym "make-" name-str) ,@params)
+               (##list '##subtype-set! (##list '##vector ',tag ,@params) 9))
+             (##define-macro (,(sym name-str "?") x)
+               (##list 'let
+                     (##list (##list 'xxx. x))
+                     '(and (##subtyped? xxx.)
+                           (##eq? (##subtype xxx.) 9)
+                           (##eq? (##vector-ref xxx. 0) ,tag))))
              ',name)))
 
       (let loop1 ((l1 field-defs) (l2 '()) (l3 '()) (i 1))
@@ -79,38 +79,38 @@
     (err)))
 
 (define-macro (bind-exit proc . body)
-  `(CALL-WITH-CURRENT-CONTINUATION
-    (LAMBDA ,proc
+  `(call-with-current-continuation
+    (lambda ,proc
       ,@body)))
 
 (define-macro (catch-signals thunk)
-  `(BEGIN
-     (SET! ##USER-INTERRUPT 
-	   (LAMBDA () (DYLAN:ERROR "User interrupt ...")))
-     (##CATCH-ALL 
-      (LAMBDA (TYPE ARGS)
-	(DYLAN:ERROR TYPE))
+  `(begin
+     (set! ##user-interrupt 
+	   (lambda () (dylan:error "user interrupt ...")))
+     (##catch-all 
+      (lambda (type args)
+	(dylan:error type))
       ,thunk)))
 
 (define-macro (call/cc proc . body)
-  `(CALL-WITH-CURRENT-CONTINUATION ,proc))
+  `(call-with-current-continuation ,proc))
 
 (define-macro (dylan:string->symbol str)
-  `(STRING->SYMBOL 
-    (LIST->STRING 
-     (MAP CHAR-DOWNCASE 
-	  (STRING->LIST ,str)))))
+  `(string->symbol 
+    (list->string 
+     (map char-downcase 
+	  (string->list ,str)))))
 
 (define-macro (secure-open-input-file str)
-  `(##OPEN-INPUT-FILE ,str))
+  `(##open-input-file ,str))
 
 (define-macro (lst? v)
-  `(LET ((V ,v))
-     (OR (NULL? V) (PAIR? V))))
+  `(let ((v ,v))
+     (or (null? v) (pair? v))))
 
 
 (define-macro (main)
-  `(DYLAN:REPL (COMMAND-LINE)))
+  `(dylan:repl (command-line)))
 
 ;; (define-macro (fix:+ x1 x2) `(##fixnum.+ ,x1 ,x2))                     ;;
 ;; (define-macro (fix:- x1 x2) `(##fixnum.- ,x1 ,x2))                     ;;

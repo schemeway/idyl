@@ -12,7 +12,7 @@
 (##define-macro (def-struct name . field-defs)
 
   (define (err)
-    (##signal '##SIGNAL.SYNTAX-ERROR
+    (##signal '##signal.syntax-error
               (##cons 'define-structure (##cons name field-defs))
               "Ill-formed special form:"
               'define-structure))
@@ -28,16 +28,16 @@
         (let* ((field-str (##symbol->string field))
                (field-ref (sym name-str "-" field-str))
                (field-set! (sym name-str "-" field-str "-set!")))
-          (##cons `(##DEFINE-MACRO (,field-set! X Y)
-		      (##LIST '##VECTOR-SET! X ,i Y))
-                  (##cons `(##DEFINE-MACRO (,field-ref X)
-                             (##LIST '##VECTOR-REF X ,i))
+          (##cons `(##define-macro (,field-set! x y)
+		      (##list '##vector-set! x ,i y))
+                  (##cons `(##define-macro (,field-ref x)
+                             (##list '##vector-ref x ,i))
                           fields))))
 
       (define (generate-definitions field-ops all-fields printed-fields)
         (let ((params (##reverse all-fields)))
-          `(BEGIN
-             (SET! ,tag '#(,name ,@(##reverse printed-fields)))
+          `(begin
+             (set! ,tag '#(,name ,@(##reverse printed-fields)))
              ',name)))
 
       (let loop1 ((l1 field-defs) (l2 '()) (l3 '()) (i 1))
