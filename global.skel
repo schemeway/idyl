@@ -181,7 +181,7 @@
 	 '<simple-restart>
 	 '()
 	 (list <restart>)
-	 (list (list 'KEYWORD 'CONDITION #f '()))))
+	 (list (list 'keyword 'condition #f '()))))
   (set! <abort> 
 	(class:make-class '<abort> '() (list <restart>) '()))
   (set! <simple-error> 
@@ -189,34 +189,34 @@
 	 '<simple-error>      
 	 '() 
 	 (list <error>)
-	 (list (list 'SLOT 'CONDITION-FORMAT-STRING    '() 'CONSTANT <object> 
-		     (list (cons 'INIT-KEYWORD (make-keyword 'FORMAT-STRING))))
-	       (list 'SLOT 'CONDITION-FORMAT-ARGUMENTS '() 'CONSTANT <object>
-		     (list (cons 'INIT-KEYWORD (make-keyword 'FORMAT-ARGUMENTS))))
-	       (list 'KEYWORD 'FORMAT-STRING #f '())
-	       (list 'KEYWORD 'FORMAT-ARGUMENTS #f '()))))
+	 (list (list 'slot 'condition-format-string    '() 'constant <object> 
+		     (list (cons 'init-keyword (make-keyword 'format-string))))
+	       (list 'slot 'condition-format-arguments '() 'constant <object>
+		     (list (cons 'init-keyword (make-keyword 'format-arguments))))
+	       (list 'keyword 'format-string #f '())
+	       (list 'keyword 'format-arguments #f '()))))
   (set! <type-error> 
 	(class:make-class
 	 '<type-error>
 	 '()
 	 (list <error>)
-	 (list (list 'SLOT 'TYPE-ERROR-VALUE '() 'CONSTANT <object> 
-		     (list (cons 'INIT-KEYWORD (make-keyword 'VALUE))))
-	       (list 'SLOT 'TYPE-ERROR-TYPE '() 'CONSTANT <object>
-		     (list (cons 'INIT-KEYWORD (make-keyword 'TYPE))))
-	       (list 'KEYWORD 'VALUE #f '())
-	       (list 'KEYWORD 'TYPE #f '()))))
+	 (list (list 'slot 'type-error-value '() 'constant <object> 
+		     (list (cons 'init-keyword (make-keyword 'value))))
+	       (list 'slot 'type-error-type '() 'constant <object>
+		     (list (cons 'init-keyword (make-keyword 'type))))
+	       (list 'keyword 'value #f '())
+	       (list 'keyword 'type #f '()))))
   (set! <simple-warning> 
 	(class:make-class 
 	 '<simple-warning>
 	 '()
 	 (list <warning>)
-	 (list (list 'SLOT 'CONDITION-FORMAT-STRING    '() 'CONSTANT <object> 
-		     (list (cons 'INIT-KEYWORD (make-keyword 'FORMAT-STRING))))
-	       (list 'SLOT 'CONDITION-FORMAT-ARGUMENTS '() 'CONSTANT <object>
-		     (list (cons 'INIT-KEYWORD (make-keyword 'FORMAT-ARGUMENTS))))
-	       (list 'KEYWORD 'FORMAT-STRING #f '())
-	       (list 'KEYWORD 'FORMAT-ARGUMENTS #f '()))))
+	 (list (list 'slot 'condition-format-string    '() 'constant <object> 
+		     (list (cons 'init-keyword (make-keyword 'format-string))))
+	       (list 'slot 'condition-format-arguments '() 'constant <object>
+		     (list (cons 'init-keyword (make-keyword 'format-arguments))))
+	       (list 'keyword 'format-string #f '())
+	       (list 'keyword 'format-arguments #f '()))))
   )
 	 
 
@@ -305,7 +305,7 @@
 
 ;; --- Diverses initialisations (custom) -------------------------------- ;;
   (error:init)
-  (x:init)
+;  (x:init)
 
 ;; --- On charge le fichier d'initialisation ---------------------------- ;;
   (fun:apply

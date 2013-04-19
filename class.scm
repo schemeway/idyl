@@ -267,7 +267,7 @@
 	    (let ((key (caar l))
 		  (val (cdar l)))
 	      (cond
-	       ((eq? key 'TYPE)
+	       ((eq? key 'type)
 		(cond
 		 ((init-arg-type init-arg)
 		  (dylan:warning "`type:' is specified twice in init. arg."))
@@ -276,7 +276,7 @@
 		    (error:check-type type <type>)
 		    (init-arg-type-set! init-arg type)))))
 	       
-	       ((eq? key 'INIT-VALUE)
+	       ((eq? key 'init-value)
 		(cond
 		 ((init-arg-init-value init-arg)
 		  (dylan:warning "`init-value:' is specified twice in init. arg."))
@@ -288,7 +288,7 @@
 		  (let ((initv ((gen:gen-expr '() val) #f)))
 		    (init-arg-init-value-set! init-arg initv)))))
 
-	       ((eq? key 'INIT-FUNCTION)
+	       ((eq? key 'init-function)
 		(cond
 		 ((init-arg-init-function init-arg)
 		  (dylan:warning "`init-function:' is specified twice in init. arg."))
@@ -368,7 +368,7 @@
 	  (cond 
 	   
 	   ; Définition d'un nouveau champ
-	   ((eq? descr-type 'SLOT)
+	   ((eq? descr-type 'slot)
 	    (let ((sl-name (list-ref descr 1))
 		  (sl-type (list-ref descr 4)))
 
@@ -381,7 +381,7 @@
 		
 		(class:parse-slot-keys! slot (list-ref descr 5))
 		
-		(if (not (eq? alloc 'CONSTANT))
+		(if (not (eq? alloc 'constant))
 		    (if (not (slot-setter-name slot))
 			(slot-setter-name-set! slot setter-name))
 		    (slot-setter-name-set! slot $the-false-value))
@@ -400,13 +400,13 @@
 		(add-slot! (slot-getter-name slot) slot))))
 	   
 	   ; Définition d'un mot-clé
-	   ((eq? descr-type 'KEYWORD)
+	   ((eq? descr-type 'keyword)
 	    (add-init-arg! 
 	     (cadr descr) 
 	     (parse-init-arg-gut (caddr descr) (cadddr descr))))
 
 	   ; Modifications à un champ hérité
-	   ((eq? descr-type 'INHERITED-SLOT)
+	   ((eq? descr-type 'inherited-slot)
 	    (let* ((slot-name (list-ref descr 1))
 		   (slot-keys (list-ref descr 2))
 		   (slot (assq slot-name *slots*)))
@@ -431,7 +431,7 @@
 	      (val (cdar l)))
 	  (cond
 
-	   ((eq? key 'SETTER)
+	   ((eq? key 'setter)
 	    (cond
 	     ((slot-setter-name slot)
 	      (dylan:warning "`setter:' cannot be specified twice (ignored)"))
@@ -444,7 +444,7 @@
 	     (else
 	      (dylan:error "Bad setter name"))))
 	   
-	   ((eq? key 'INIT-VALUE)
+	   ((eq? key 'init-value)
 	    (cond
 	     ((slot-init-value slot)
 	      (dylan:warning "`init-value:' cannot be specified twice in slot decl."))
@@ -456,7 +456,7 @@
 	      (let ((comp-val (gen:gen-expr '() val)))
 		(slot-init-value-set! slot comp-val)))))
 
-	   ((eq? key 'INIT-FUNCTION)
+	   ((eq? key 'init-function)
 	    (cond
 	     ((slot-init-function slot)
 	      (dylan:warning "`init-function:' cannot be specified twice in slot decl."))
@@ -468,7 +468,7 @@
 	      (let ((comp-val (gen:gen-expr '() val)))
 		(slot-init-function-set! slot comp-val)))))
 
-	   ((eq? key 'INIT-KEYWORD)
+	   ((eq? key 'init-keyword)
 	    (cond
 	     ((slot-init-key slot)
 	      (dylan:warning "`init-keyword:' cannot be specified twice in slot decl."))
@@ -479,7 +479,7 @@
 	     (else
 	      (slot-init-key-set! slot (keyword-name val)))))
 
-	   ((eq? key 'REQUIRED-INIT-KEYWORD)
+	   ((eq? key 'required-init-keyword)
 	    (cond
 	     ((slot-req-init-key slot)
 	      (dylan:warning "`required-init-keyword:' cannot be specified twice in slot decl."))
@@ -512,10 +512,10 @@
       (let ((key (caar keys))
 	    (val (cdar keys)))
 	(cond
-	 ((eq? key 'INIT-VALUE)
+	 ((eq? key 'init-value)
 	  (slot-init-value-set! *new-slot* (gen:gen-expr '() val))
 	  (slot-init-function-set! *new-slot* #f))
-	 ((eq? key 'INIT-FUNCTION)
+	 ((eq? key 'init-function)
 	  (slot-init-function-set! *new-slot* (gen:gen-expr '() val))
 	  (slot-init-value-set! *new-slot* #f))
 	 (else
@@ -654,10 +654,10 @@
 	       (sl-getter  (slot-getter-name slot-descr))
 	       (sl-setter  (slot-setter-name slot-descr)))
 	  (if (and (eq? sl-class cl)
-		   (or (eq? sl-alloc 'SUBCLASS)
-		       (eq? sl-alloc 'CLASS)
-		       (eq? sl-alloc 'INSTANCE)
-		       (eq? sl-alloc 'CONSTANT)))
+		   (or (eq? sl-alloc 'subclass)
+		       (eq? sl-alloc 'class)
+		       (eq? sl-alloc 'instance)
+		       (eq? sl-alloc 'constant)))
 	      (begin
 		(let ((gf (fun:ensure-generic-function sl-getter)))
 		  (fun:add-method! 
@@ -669,8 +669,8 @@
 		    '()
 		    #f
 		    (make-return-value (list (list 'result sl-type)) #f #f)
-		    (if (or (eq? sl-alloc 'INSTANCE)
-			    (eq? sl-alloc 'CONSTANT))
+		    (if (or (eq? sl-alloc 'instance)
+			    (eq? sl-alloc 'constant))
 			(class:make-getter sl-getter)
 			(class:make-class-getter sl-alloc sl-class sl-getter)))))
 		(if (not (eq? sl-setter $the-false-value))
@@ -684,8 +684,8 @@
 			'()
 			#f
 			(make-return-value (list (list 'result <object>)) #f #f)
-			(if (or (eq? sl-alloc 'INSTANCE)
-				(eq? sl-alloc 'CONSTANT))
+			(if (or (eq? sl-alloc 'instance)
+				(eq? sl-alloc 'constant))
 			    (class:make-setter sl-getter)
 			    (class:make-class-setter sl-alloc sl-class sl-getter))))))))
 	  (loop (cdr l))))))
@@ -794,8 +794,8 @@
 		 (keywd (slot-init-key slot-descr))
 		 (reqkey (slot-req-init-key slot-descr)))
 	    (cond
-	     ((or (eq? slot-alloc 'INSTANCE)
-		  (eq? slot-alloc 'CONSTANT))
+	     ((or (eq? slot-alloc 'instance)
+		  (eq? slot-alloc 'constant))
 	      (cons
 	       (class:make-slot 
 		slot-name 
@@ -814,10 +814,10 @@
 		 (else   $non-initialized))
 		type)
 	       (loop (cdr cl-slots))))
-	     ((eq? slot-alloc 'SUBCLASS)
+	     ((eq? slot-alloc 'subclass)
 	      (init-class-slot! class slot-name type initv initf keywd reqkey keys)
 	      (loop (cdr cl-slots)))
-	     ((eq? slot-alloc 'CLASS)
+	     ((eq? slot-alloc 'class)
 	      (init-class-slot! 
 	       (slot-class-def slot-descr) slot-name type initv initf keywd reqkey keys)
 	      (loop (cdr cl-slots)))
@@ -838,5 +838,5 @@
     (fun:apply 
      initialize-gf
      (cons inst def-args) 
-     '()) 
+     '())
     inst))
