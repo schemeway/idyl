@@ -15,13 +15,13 @@ A.OUT		= idyl
 SCMCONFIGDIR	= ${shell pwd}
 
 #; --- Where the executable must be installed --------------------------- ;#
-INSTALL_DIR	= /home/dboucher/bin
+INSTALL_DIR	= ~/bin
 
 #; --- Where the libraries must be installed ---------------------------- ;#
-LIB_DIR		= /home/dboucher/lib/idyl
+LIB_DIR		= ~/lib/idyl
 
 #; --- The install program ---------------------------------------------- ;#
-INSTALL	 	= /usr/local/bin/install
+INSTALL	 	= install
 
 
 #; ---------------------------------------------------------------------- ;#
@@ -55,7 +55,7 @@ SHELL		= sh
 #; ---------------------------------------------------------------------- ;#
 SOURCE		= lr-dvr.scm lexer.scm parser.scm cleanup.scm         \
                   class.scm env.scm generic.scm gen.scm               \
-		  error.scm global.scm util.scm repl.scm
+		  error.scm global.scm util.scm x.scm repl.scm
 
 GAMBITSOURCE	= structs.scm
 BIGLOOSOURCE	=
@@ -224,17 +224,17 @@ gambit-src/structs.saux: structs.scm
 	                 cat $(SCMCONFIGDIR)/prologue.gambit $< > $*.saux; \
 	        	      else                                         \
 			 echo "*** WARNING: cant find prologue.gambit";    \
-  	                 cp $< $*.saux;                                    \
+	                 cp $< $*.saux;                                    \
                       fi;                                                  \
                       \rm -f $*.c $*.o;;                                   \
 	     bigloo)  echo "bigloo -> $*.saux";                            \
                       if [ -f $(SCMCONFIGDIR)/prologue.bigloo ] ; then     \
-  	                cat $(notdir $*).bgl                               \
+	                    cat $(notdir $*).bgl                           \
                             $<                                             \
                             > $*.saux;                                     \
                         else                                               \
-   			    echo "*** WARNING: cant find prologue.bigloo"; \
-  	                    cat $(notdir $*).bgl $< > $*.saux;             \
+			    echo "*** WARNING: cant find prologue.bigloo"; \
+	                    cat $(notdir $*).bgl $< > $*.saux;             \
                       fi;                                                  \
                       \rm -f $*.c $*.o;;                                   \
              *) : ;; esac
