@@ -9,11 +9,11 @@
 ;; ---------------------------------------------------------------------- ;;
 
 (define x-open-window 
-  (##c-procedure (string int int) int  "x_open_window"))
+  (c-lambda (char-string int int) int  "x_open_window"))
 (define x-close-window
-  (##c-procedure (int) void "x_close_window"))
+  (c-lambda (int) void "x_close_window"))
 (define x-draw-line
-  (##c-procedure (int int int int int int) void "x_draw_line"))
+  (c-lambda (int int int int int int) void "x_draw_line"))
 
 ;; --- Fin des declarations externes ------------------------------------ ;;
 
