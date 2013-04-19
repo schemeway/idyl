@@ -213,9 +213,9 @@ gambit-src/x11.o: x11.c x11.c
 	@ (cd gambit-src/ ; ln -sf ../x11.c . ; \
 	  $(CC) $(CFLAGS) -c x11.c)
 
-gambit-src/structs.saux: structs.scm
-	@ rm -f gambit-src/structs.saux
-	@ cat prologue.gambit structs.gsc structs.scm > gambit-src/structs.saux
+#gambit-src/structs.saux: structs.scm
+#	@ rm -f gambit-src/structs.saux
+#	@ cat prologue.gambit structs.gsc structs.scm > gambit-src/structs.saux
 
 %.saux: ../%.scm $(SCMCONFIGDIR)/prologue.gambit $(SCMCONFIGDIR)/prologue.bigloo
 	@ case $(COMPILER) in					           \
