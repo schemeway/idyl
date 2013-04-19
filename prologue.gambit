@@ -13,70 +13,7 @@
 ;; ---------------------------------------------------------------------- ;;
 
 (##define-macro (def-struct name . field-defs)
-
-  (define (err)
-    (##signal '##signal.syntax-error
-              (##cons 'define-structure (##cons name field-defs))
-              "Ill-formed special form:"
-              'define-structure))
-
-  (define (sym . strings)
-    (##string->symbol (##apply ##string-append strings)))
-
-  (if (##symbol? name)
-    (let* ((name-str (##symbol->string name))
-           (tag (sym "##structure-tag." name-str)))
-
-      (define (add-field i field fields)
-        (let* ((field-str (##symbol->string field))
-               (field-ref (sym name-str "-" field-str))
-               (field-set! (sym name-str "-" field-str "-set!")))
-          (##cons `(##define-macro (,field-set! x y)
-		      (##list '##vector-set! x ,i y))
-                  (##cons `(##define-macro (,field-ref x)
-                             (##list '##vector-ref x ,i))
-                          fields))))
-
-      (define (generate-definitions field-ops all-fields printed-fields)
-        (let ((params (##reverse all-fields)))
-          `(begin
-             ,@field-ops
-             (##define-macro (,(sym "make-" name-str) ,@params)
-               (##list '##subtype-set! (##list '##vector ',tag ,@params) 9))
-             (##define-macro (,(sym name-str "?") x)
-               (##list 'let
-                     (##list (##list 'xxx. x))
-                     '(and (##subtyped? xxx.)
-                           (##eq? (##subtype xxx.) 9)
-                           (##eq? (##vector-ref xxx. 0) ,tag))))
-             ',name)))
-
-      (let loop1 ((l1 field-defs) (l2 '()) (l3 '()) (i 1))
-        (if (##pair? l1)
-          (let ((rest (##cdr l1)) (field (##car l1)))
-            (cond ((##symbol? field)
-                   (loop1 rest
-                         (add-field i field l2)
-                         (##cons field l3)
-                         (##fixnum.+ i 1)))
-                  ((and (or (##null? field) (##pair? field))
-                        (##not (##pair? rest)))
-                   (let ((printed-fields l3))
-                     (let loop2 ((l1 field) (l2 l2) (l3 l3) (i i))
-                       (if (##pair? l1)
-                         (let ((rest (##cdr l1)) (field (##car l1)))
-                           (cond ((##symbol? field)
-                                  (loop2 rest
-                                        (add-field i field l2)
-                                        (##cons field l3)
-                                        (##fixnum.+ i 1)))
-                                  (else
-                                   (err))))
-                         (generate-definitions l2 l3 printed-fields)))))
-                  (else
-                   (err))))
-          (generate-definitions l2 l3 l3))))
-    (err)))
+  `(define-structure ,name ,@field-defs))
 
 (define-macro (bind-exit proc . body)
   `(call-with-current-continuation
@@ -87,8 +24,8 @@
   `(begin
      (set! ##user-interrupt 
 	   (lambda () (dylan:error "user interrupt ...")))
-     (##catch-all 
-      (lambda (type args)
+     (with-exception-handler
+      (lambda (type)
 	(dylan:error type))
       ,thunk)))
 
@@ -131,12 +68,12 @@
 (define-macro (flo:< x1 x2) `(##flonum.< ,x1 ,x2))
 (define-macro (flo:= x1 x2) `(##flonum.= ,x1 ,x2))
 
-(include "../structs.scm")
-
 (declare
- (extended-bindings)
- (standard-bindings)
- (block))
+; (extended-bindings)
+; (standard-bindings)
+ (safe)
+; (block)
+)
 
 ;; --- Fin du prologue pour Gambit-C ------------------------------------ ;;
 
