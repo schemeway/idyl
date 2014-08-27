@@ -13,12 +13,12 @@ Overview
 
 IDyl is an interpreter for a language resembling Dylan (trademark of
 Apple Computer). It is a first step towards the implementation of a
-production quality compiler for Dylan. It is currently being developped
+production quality compiler for Dylan. It is currently being developed
 by Dominique Boucher, Marc Feeley, Marco Jacques, Jacques Malenfant,
 and Manuel Serrano.
 
    Although IDyl provides a few extensions to Dylan, there are many
-features that are missing.  IDyl is essentially a pedogagical tool,
+features that are missing.  IDyl is essentially a pedagogical tool,
 primarily intended for the exploration of the Dylan language and its
 implementation. It should be kept in mind that IDyl is still
 experimental and is not meant for production use.
@@ -177,8 +177,8 @@ Reference Manual) that are missing in IDyl:
      CPL of a class A is a list which contains all the superclasses of
      A in some order. In IDyl, the CPL is computed by a monotonic
      algorithm that differs from the CLOS algorithm described in the
-     DIRM and that is slighty more restrictive. I.e. some class
-     heterarchies will be rejected by IDyl, altough they are acceptable
+     DIRM and that is slightly more restrictive. I.e. some class
+     heterarchies will be rejected by IDyl, although they are acceptable
      by the CLOS algorithm.
 
 
@@ -246,7 +246,7 @@ Index
 * printf:                               Extensions.
 * reset-environment:                    Extensions.
 * close:                                Extensions.
-* environnement reinitialization:       Extensions.
+* environment reinitialization:         Extensions.
 * Loading a file:                       Extensions.
 * X windows:                            Extensions.
 
